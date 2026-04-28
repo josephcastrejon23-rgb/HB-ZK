@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>The Twins Celebration 👯‍♀️</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: 'Arial', sans-serif; }
+        .split-screen { display: flex; height: 100vh; }
+        .side { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.5s; cursor: pointer; position: relative; overflow: hidden; }
+        
+        .zarelly-side { background: #1a050a; border-right: 2px solid #ff4d6d; }
+        .kate-side { background: #050a1a; }
+        
+        .side:hover { flex: 1.5; }
+        .side h2 { font-size: 4rem; z-index: 2; margin: 0; }
+        
+        .side::before {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, #000 80%); opacity: 0.5;
+        }
+
+        .center-badge {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: black; padding: 20px; border-radius: 50%;
+            font-weight: bold; z-index: 10; box-shadow: 0 0 40px #fff;
+        }
+
+        .btn-enter {
+            margin-top: 20px; padding: 10px 25px; border: 2px solid #fff;
+            color: #fff; text-decoration: none; border-radius: 30px; z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="center-badge">20 AÑOS</div>
+
+    <div class="split-screen">
+        <div class="side zarelly-side" onclick="location.href='zarelly.html'">
+            <h2>Zarelly</h2>
+            <p style="z-index: 2;">MI AMOR</p>
+            <a href="zarelly.html" class="btn-enter">Entrar a su mundo</a>
+        </div>
+        <div class="side kate-side" onclick="location.href='kate.html'">
+            <h2>Kate</h2>
+            <p style="z-index: 2;">MI CUÑIS</p>
+            <a href="kate.html" class="btn-enter">Ver su fiesta</a>
+        </div>
+    </div>
+</body>
+</html>
