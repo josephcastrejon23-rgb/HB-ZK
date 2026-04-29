@@ -4,31 +4,44 @@
     <meta charset="UTF-8">
     <title>Zarelly & Kate 👯‍♀️</title>
     <style>
-        body { margin: 0; background: #fdfcf0; font-family: 'Montserrat'; text-align: center; color: #333; }
-        .mural { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 50px; }
-        .photo-frame { background: white; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: rotate(calc(var(--r) * 1deg)); width: 250px; }
-        .photo-frame img { width: 100%; height: 250px; object-fit: cover; }
-        .title-mural { font-size: 3.5rem; margin-top: 50px; color: #b76e79; }
+        body { margin: 0; background: #fdfcf0; font-family: 'Montserrat', sans-serif; text-align: center; }
+        .header-mural { background: white; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .mural-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 50px; }
+        
+        .polaroid {
+            background: white; padding: 15px 15px 50px 15px; width: 280px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #ddd;
+            transform: rotate(var(--deg)); transition: 0.3s;
+        }
+        .polaroid:hover { transform: rotate(0deg) scale(1.1); z-index: 10; border-color: gold; }
+        .polaroid img { width: 100%; height: 280px; object-fit: cover; }
+        .polaroid p { font-family: 'Dancing Script'; font-size: 1.5rem; margin-top: 15px; color: #555; }
+        
+        .twin-stats { display: flex; justify-content: center; gap: 50px; margin: 40px 0; }
+        .stat-circle { width: 120px; height: 120px; border-radius: 50%; border: 4px solid gold; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
-    <h1 class="title-mural">Mellizas: Doble Alegría</h1>
-    <p>Un mural dedicado a las hermanas más unidas del mundo.</p>
-
-    <div class="mural">
-        <div class="photo-frame" style="--r: -3"><img src="mellizas1.jpg"><p>Juntas siempre</p></div>
-        <div class="photo-frame" style="--r: 2"><img src="mellizas2.jpg"><p>20 años de risas</p></div>
-        <div class="photo-frame" style="--r: -1"><img src="mellizas3.jpg"><p>El mejor equipo</p></div>
-        <div class="photo-frame" style="--r: 4"><img src="mellizas4.jpg"><p>Cumpleaños Feliz</p></div>
+    <div class="header-mural">
+        <h1 style="font-size: 3rem; color: #b76e79;">Zarelly & Kate: 20 Años Juntas</h1>
+        <p>Dos vidas, un mismo corazón. ¡Feliz cumpleaños mellizas!</p>
     </div>
 
-    <div style="padding: 40px; background: #fff; border-radius: 30px; margin: 20px;">
-        <h2>¿Sabían que...?</h2>
-        <p>Tener una melliza es tener una mejor amiga de por vida. ¡Las quiero mucho a las dos!</p>
+    <div class="twin-stats">
+        <div class="stat-circle" style="color: #ff4d6d;">Zarelly <br> 20</div>
+        <div class="stat-circle" style="color: #9d4edd;">Kate <br> 20</div>
     </div>
 
-    <div style="margin-bottom: 50px;">
-        <a href="zarelly.html">Volver a Zarelly</a> | <a href="kate.html">Volver a Kate</a>
+    <div class="mural-container">
+        <div class="polaroid" style="--deg: -3deg;"><img src="m1.jpg"><p>Día de sol ☀️</p></div>
+        <div class="polaroid" style="--deg: 2deg;"><img src="m2.jpg"><p>Mellizas Power 👯‍♀️</p></div>
+        <div class="polaroid" style="--deg: -1deg;"><img src="m3.jpg"><p>Mejores amigas</p></div>
+        <div class="polaroid" style="--deg: 4deg;"><img src="m4.jpg"><p>20 años de risas</p></div>
+    </div>
+
+    <div style="padding: 50px; background: #fff;">
+        <a href="zarelly.html" style="color: #ff4d6d; text-decoration: none;">Ver Sorpresa Zarelly</a> | 
+        <a href="kate.html" style="color: #9d4edd; text-decoration: none;">Ver Sorpresa Kate</a>
     </div>
 </body>
 </html>
