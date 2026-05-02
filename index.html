@@ -2,46 +2,174 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Zarelly & Kate 👯‍♀️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Together Forever 👯‍♀️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; background: #fdfcf0; font-family: 'Montserrat', sans-serif; text-align: center; }
-        .header-mural { background: white; padding: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .mural-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; padding: 50px; }
+        :root { --soft-pink: #fbc2eb; --soft-blue: #a6c1ee; --main-font: 'Quicksand', sans-serif; }
         
-        .polaroid {
-            background: white; padding: 15px 15px 50px 15px; width: 280px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #ddd;
-            transform: rotate(var(--deg)); transition: 0.3s;
+        body { margin: 0; background: #fff; font-family: var(--main-font); overflow-x: hidden; color: #444; }
+
+        /* FONDO DINÁMICO DE GRADIENTE ANIMADO */
+        .animated-bg {
+            position: fixed; inset: 0;
+            background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #ffdde1, #ee9ca7);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            z-index: -1;
         }
-        .polaroid:hover { transform: rotate(0deg) scale(1.1); z-index: 10; border-color: gold; }
-        .polaroid img { width: 100%; height: 280px; object-fit: cover; }
-        .polaroid p { font-family: 'Dancing Script'; font-size: 1.5rem; margin-top: 15px; color: #555; }
-        
-        .twin-stats { display: flex; justify-content: center; gap: 50px; margin: 40px 0; }
-        .stat-circle { width: 120px; height: 120px; border-radius: 50%; border: 4px solid gold; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* INTRO TIPO CÁMARA FLASH */
+        #flash-intro {
+            position: fixed; inset: 0; background: #fff; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .shutter { position: absolute; width: 100%; height: 50%; background: #000; transition: 0.8s ease-in-out; }
+        .shutter.top { top: 0; } .shutter.bottom { bottom: 0; }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container { display: none; padding: 40px 20px; opacity: 0; transition: 2s; }
+
+        /* ÁREA DEL ROMPECABEZAS */
+        #puzzle-board {
+            width: 300px; height: 300px; margin: 30px auto;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 5px; background: rgba(255,255,255,0.3);
+            padding: 10px; border-radius: 10px; border: 2px dashed #fff;
+            position: relative;
+        }
+        .puzzle-piece {
+            width: 100%; height: 100%; background-image: url('foto_ambas_puzzle.jpg');
+            background-size: 300px 300px; border-radius: 5px; cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .puzzle-piece:hover { transform: scale(1.05); z-index: 10; }
+
+        /* MURAL DE FOTOS FLOTANTES */
+        .floating-photos { position: relative; height: 400px; max-width: 1000px; margin: 0 auto; }
+        .polaroid {
+            position: absolute; background: white; padding: 10px 10px 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: rotate(var(--r));
+            width: 150px; transition: 0.5s;
+        }
+        .polaroid img { width: 100%; height: 150px; object-fit: cover; }
+        .polaroid:hover { transform: rotate(0deg) scale(1.2); z-index: 100; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+
+        .btn-play {
+            background: #fff; border: none; padding: 15px 40px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #ee9ca7;
+        }
+
+        .heart-loader { color: #fbc2eb; font-size: 50px; animation: beat 1.2s infinite; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
     </style>
 </head>
 <body>
-    <div class="header-mural">
-        <h1 style="font-size: 3rem; color: #b76e79;">Zarelly & Kate: 20 Años Juntas</h1>
-        <p>Dos vidas, un mismo corazón. ¡Feliz cumpleaños mellizas!</p>
+
+    <div class="animated-bg"></div>
+
+    <!-- PANTALLA INICIAL DE FLASH -->
+    <div id="flash-intro">
+        <div class="shutter top" id="s-top"></div>
+        <div class="heart-loader">❤️</div>
+        <button class="btn-play" onclick="captureMoment()">Revelar Momentos</button>
+        <div class="shutter bottom" id="s-bottom"></div>
     </div>
 
-    <div class="twin-stats">
-        <div class="stat-circle" style="color: #ff4d6d;">Zarelly <br> 20</div>
-        <div class="stat-circle" style="color: #9d4edd;">Kate <br> 20</div>
+    <!-- AUDIO INNOVADOR (LOFI RELAXING) -->
+    <audio id="audioAmbas" loop>
+        <source src="TU_LINK_DE_MUSICA_LOFI_O_INDIE.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="main-content">
+        <h1 style="font-family: 'Dancing Script'; font-size: 3.5rem; margin-bottom: 10px;">Zarelly & Kate</h1>
+        <p><i>"Unidas por el corazón, celebrando la vida juntas"</i></p>
+
+        <!-- EL ROMPECABEZAS -->
+        <div style="margin-top: 50px;">
+            <h3>Arma el recuerdo 🧩</h3>
+            <div id="puzzle-board">
+                <!-- Se genera por JS -->
+            </div>
+            <p id="puzzle-status">Haz clic en las piezas para ordenarlas</p>
+        </div>
+
+        <div class="message-box" style="max-width: 700px; margin: 40px auto; background: rgba(255,255,255,0.4); padding: 25px; border-radius: 20px; border: 1px solid #fff;">
+            <h2 style="font-family: 'Dancing Script';">Un mensaje para ustedes ✨</h2>
+            <p>Es increíble ver la conexión que tienen. Que este día esté lleno de risas, fotos y momentos que guarden para siempre en su memoria. ¡Feliz día a las dos!</p>
+        </div>
+
+        <!-- MURAL FLOTANTE -->
+        <div class="floating-photos">
+            <div class="polaroid" style="--r: -10deg; top: 20px; left: 5%;"> <img src="ambas1.jpg"> </div>
+            <div class="polaroid" style="--r: 15deg; top: 50px; left: 25%;"> <img src="ambas2.jpg"> </div>
+            <div class="polaroid" style="--r: -5deg; top: 10px; left: 50%;"> <img src="ambas3.jpg"> </div>
+            <div class="polaroid" style="--r: 8deg; top: 60px; left: 75%;"> <img src="ambas4.jpg"> </div>
+        </div>
+
+        <div style="height: 100px;"></div>
     </div>
 
-    <div class="mural-container">
-        <div class="polaroid" style="--deg: -3deg;"><img src="m1.jpg"><p>Día de sol ☀️</p></div>
-        <div class="polaroid" style="--deg: 2deg;"><img src="m2.jpg"><p>Mellizas Power 👯‍♀️</p></div>
-        <div class="polaroid" style="--deg: -1deg;"><img src="m3.jpg"><p>Mejores amigas</p></div>
-        <div class="polaroid" style="--deg: 4deg;"><img src="m4.jpg"><p>20 años de risas</p></div>
-    </div>
+    <script>
+        const audio = document.getElementById('audioAmbas');
+        
+        function captureMoment() {
+            // Animación de obturador de cámara
+            document.getElementById('s-top').style.height = '0';
+            document.getElementById('s-bottom').style.height = '0';
+            
+            audio.play();
+            
+            setTimeout(() => {
+                document.getElementById('flash-intro').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('flash-intro').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    setTimeout(() => { document.getElementById('main-content').style.opacity = '1'; }, 100);
+                    initPuzzle();
+                }, 800);
+            }, 600);
+        }
 
-    <div style="padding: 50px; background: #fff;">
-        <a href="zarelly.html" style="color: #ff4d6d; text-decoration: none;">Ver Sorpresa Zarelly</a> | 
-        <a href="kate.html" style="color: #9d4edd; text-decoration: none;">Ver Sorpresa Kate</a>
-    </div>
+        // LÓGICA DEL ROMPECABEZAS (Mezclado inicial)
+        const positions = [
+            '0px 0px', '-100px 0px', '-200px 0px',
+            '0px -100px', '-100px -100px', '-200px -100px',
+            '0px -200px', '-100px -200px', '-200px -200px'
+        ];
+        let currentOrder = [...positions].sort(() => Math.random() - 0.5);
+
+        function initPuzzle() {
+            const board = document.getElementById('puzzle-board');
+            board.innerHTML = '';
+            currentOrder.forEach((pos, index) => {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece';
+                piece.style.backgroundPosition = pos;
+                piece.onclick = () => swapPiece(index);
+                board.appendChild(piece);
+            });
+        }
+
+        function swapPiece(index) {
+            // Lógica simple de rotación para "armar"
+            let first = currentOrder[index];
+            currentOrder[index] = currentOrder[(index + 1) % 9];
+            currentOrder[(index + 1) % 9] = first;
+            initPuzzle();
+            checkWin();
+        }
+
+        function checkWin() {
+            if (JSON.stringify(currentOrder) === JSON.stringify(positions)) {
+                document.getElementById('puzzle-status').innerText = "¡Completado! ❤️";
+                document.getElementById('puzzle-board').style.borderColor = "#fbc2eb";
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+    </script>
 </body>
 </html>
