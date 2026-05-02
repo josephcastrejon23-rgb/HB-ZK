@@ -3,172 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Together Forever 👯‍♀️</title>
+    <title>Zazita & Kate</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        :root { --soft-pink: #fbc2eb; --soft-blue: #a6c1ee; --main-font: 'Quicksand', sans-serif; }
+        :root { 
+            --glass: rgba(255, 255, 255, 0.25);
+            --border: rgba(255, 255, 255, 0.4);
+            --accent: #ff85a1; 
+        }
         
-        body { margin: 0; background: #fff; font-family: var(--main-font); overflow-x: hidden; color: #444; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; overflow-x: hidden; color: #fff; }
 
-        /* FONDO DINÁMICO DE GRADIENTE ANIMADO */
-        .animated-bg {
+        /* FONDO ANIMADO "AURA" */
+        .aura-bg {
             position: fixed; inset: 0;
-            background: linear-gradient(-45deg, #fbc2eb, #a6c1ee, #ffdde1, #ee9ca7);
+            background: linear-gradient(45deg, #fbc2eb, #a6c1ee, #ffdde1, #c2e9fb);
             background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            z-index: -1;
+            animation: aura 12s ease infinite;
+            z-index: -2;
         }
-        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes aura { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* INTRO TIPO CÁMARA FLASH */
-        #flash-intro {
-            position: fixed; inset: 0; background: #fff; z-index: 9999;
+        /* CAPA DE TEXTURA */
+        .overlay { position: fixed; inset: 0; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; z-index: -1; }
+
+        /* INTRO REVELACIÓN */
+        #lens-intro {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: clip-path 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+            clip-path: circle(100% at 50% 50%);
         }
-        .shutter { position: absolute; width: 100%; height: 50%; background: #000; transition: 0.8s ease-in-out; }
-        .shutter.top { top: 0; } .shutter.bottom { bottom: 0; }
+        #lens-intro.open { clip-path: circle(0% at 50% 50%); }
 
-        /* CONTENEDOR PRINCIPAL */
-        .container { display: none; padding: 40px 20px; opacity: 0; transition: 2s; }
+        /* CONTENEDOR TIPO VIDRIO */
+        .glass-panel {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 40px auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
 
-        /* ÁREA DEL ROMPECABEZAS */
+        /* ROMPECABEZAS ESTÉTICO */
+        .puzzle-container { position: relative; width: 320px; margin: 40px auto; }
         #puzzle-board {
-            width: 300px; height: 300px; margin: 30px auto;
             display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 5px; background: rgba(255,255,255,0.3);
-            padding: 10px; border-radius: 10px; border: 2px dashed #fff;
-            position: relative;
+            gap: 8px; background: rgba(255,255,255,0.1);
+            padding: 15px; border-radius: 20px;
         }
         .puzzle-piece {
-            width: 100%; height: 100%; background-image: url('foto_ambas_puzzle.jpg');
-            background-size: 300px 300px; border-radius: 5px; cursor: pointer;
-            transition: transform 0.2s;
+            width: 100%; aspect-ratio: 1; 
+            background-image: url('foto_ambas_puzzle.jpg');
+            background-size: 300px 300px; 
+            border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
-        .puzzle-piece:hover { transform: scale(1.05); z-index: 10; }
+        .puzzle-piece:hover { transform: scale(1.05); filter: brightness(1.1); }
 
-        /* MURAL DE FOTOS FLOTANTES */
-        .floating-photos { position: relative; height: 400px; max-width: 1000px; margin: 0 auto; }
-        .polaroid {
-            position: absolute; background: white; padding: 10px 10px 30px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transform: rotate(var(--r));
-            width: 150px; transition: 0.5s;
+        /* POLAROIDS MODERNAS */
+        .polaroid-stack { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 50px; }
+        .p-card {
+            background: white; padding: 12px 12px 35px; border-radius: 5px;
+            width: 180px; transform: rotate(var(--deg));
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: 0.4s; position: relative;
         }
-        .polaroid img { width: 100%; height: 150px; object-fit: cover; }
-        .polaroid:hover { transform: rotate(0deg) scale(1.2); z-index: 100; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-
-        .btn-play {
-            background: #fff; border: none; padding: 15px 40px; border-radius: 50px;
-            font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #ee9ca7;
+        .p-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 2px; }
+        .p-card:hover { transform: rotate(0deg) translateY(-20px); z-index: 10; scale: 1.1; }
+        .p-card::after { 
+            content: '♥'; position: absolute; bottom: 8px; left: 50%; 
+            transform: translateX(-50%); color: var(--accent); font-size: 1.2rem;
         }
 
-        .heart-loader { color: #fbc2eb; font-size: 50px; animation: beat 1.2s infinite; }
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .btn-magic {
+            background: #fff; color: var(--accent); border: none;
+            padding: 15px 45px; border-radius: 50px; cursor: pointer;
+            font-family: 'Dancing Script', cursive; font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .btn-magic:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255,133,161,0.4); }
+
     </style>
 </head>
 <body>
 
-    <div class="animated-bg"></div>
+    <div class="aura-bg"></div>
+    <div class="overlay"></div>
 
-    <!-- PANTALLA INICIAL DE FLASH -->
-    <div id="flash-intro">
-        <div class="shutter top" id="s-top"></div>
-        <div class="heart-loader">❤️</div>
-        <button class="btn-play" onclick="captureMoment()">Revelar Momentos</button>
-        <div class="shutter bottom" id="s-bottom"></div>
+    <!-- INTRO DE CÁMARA -->
+    <div id="lens-intro">
+        <h2 style="font-family: 'Dancing Script'; font-size: 3rem; color: white; margin-bottom: 30px;">Zazita & Kate</h2>
+        <button class="btn-magic" onclick="openLens()">Descubrir Regalo 🎁</button>
     </div>
 
-    <!-- AUDIO INNOVADOR (LOFI RELAXING) -->
-    <audio id="audioAmbas" loop>
-        <source src="TU_LINK_DE_MUSICA_LOFI_O_INDIE.mp3" type="audio/mpeg">
-    </audio>
+    <!-- AUDIO -->
+    <audio id="audioMix" loop><source src="TU_LINK_MUSICA_ESTETICA.mp3"></audio>
 
-    <div class="container" id="main-content">
-        <h1 style="font-family: 'Dancing Script'; font-size: 3.5rem; margin-bottom: 10px;">Zarelly & Kate</h1>
-        <p><i>"Unidas por el corazón, celebrando la vida juntas"</i></p>
+    <div class="glass-panel" id="main-content" style="opacity: 0; transition: 2s;">
+        <h1 style="font-family: 'Dancing Script'; font-size: 4rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.1); margin: 0;">Momentos Juntas</h1>
+        <p style="letter-spacing: 4px; font-weight: 300;">COMPLICIDAD & AMOR</p>
 
-        <!-- EL ROMPECABEZAS -->
-        <div style="margin-top: 50px;">
-            <h3>Arma el recuerdo 🧩</h3>
-            <div id="puzzle-board">
-                <!-- Se genera por JS -->
-            </div>
-            <p id="puzzle-status">Haz clic en las piezas para ordenarlas</p>
+        <!-- PUZZLE -->
+        <div class="puzzle-container">
+            <div id="puzzle-board"></div>
+            <p id="status" style="margin-top: 15px; font-weight: 500;">Ordena su foto favorita 🧩</p>
         </div>
 
-        <div class="message-box" style="max-width: 700px; margin: 40px auto; background: rgba(255,255,255,0.4); padding: 25px; border-radius: 20px; border: 1px solid #fff;">
-            <h2 style="font-family: 'Dancing Script';">Un mensaje para ustedes ✨</h2>
-            <p>Es increíble ver la conexión que tienen. Que este día esté lleno de risas, fotos y momentos que guarden para siempre en su memoria. ¡Feliz día a las dos!</p>
+        <div style="padding: 20px; font-size: 1.2rem; font-style: italic; max-width: 600px; margin: auto;">
+            "La familia es el regalo más grande, y ustedes dos juntas son pura magia. ¡Feliz cumpleaños a ambas, mis niñas favoritas!"
         </div>
 
-        <!-- MURAL FLOTANTE -->
-        <div class="floating-photos">
-            <div class="polaroid" style="--r: -10deg; top: 20px; left: 5%;"> <img src="ambas1.jpg"> </div>
-            <div class="polaroid" style="--r: 15deg; top: 50px; left: 25%;"> <img src="ambas2.jpg"> </div>
-            <div class="polaroid" style="--r: -5deg; top: 10px; left: 50%;"> <img src="ambas3.jpg"> </div>
-            <div class="polaroid" style="--r: 8deg; top: 60px; left: 75%;"> <img src="ambas4.jpg"> </div>
+        <!-- FOTOS FLOTANTES -->
+        <div class="polaroid-stack">
+            <div class="p-card" style="--deg: -8deg;"><img src="foto1.jpg"></div>
+            <div class="p-card" style="--deg: 5deg;"><img src="foto2.jpg"></div>
+            <div class="p-card" style="--deg: -3deg;"><img src="foto3.jpg"></div>
+            <div class="p-card" style="--deg: 10deg;"><img src="foto4.jpg"></div>
         </div>
 
-        <div style="height: 100px;"></div>
+        <div style="margin-top: 60px;">
+            <a href="zarelly.html" style="color: white; margin-right: 20px;">Volver a Zazita ❤️</a>
+            <a href="kate.html" style="color: white;">Volver a Kate 💜</a>
+        </div>
     </div>
 
     <script>
-        const audio = document.getElementById('audioAmbas');
+        const audio = document.getElementById('audioMix');
         
-        function captureMoment() {
-            // Animación de obturador de cámara
-            document.getElementById('s-top').style.height = '0';
-            document.getElementById('s-bottom').style.height = '0';
-            
+        function openLens() {
+            document.getElementById('lens-intro').classList.add('open');
             audio.play();
-            
             setTimeout(() => {
-                document.getElementById('flash-intro').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('flash-intro').style.display = 'none';
-                    document.getElementById('main-content').style.display = 'block';
-                    setTimeout(() => { document.getElementById('main-content').style.opacity = '1'; }, 100);
-                    initPuzzle();
-                }, 800);
-            }, 600);
+                document.getElementById('main-content').style.opacity = '1';
+                initPuzzle();
+            }, 800);
         }
 
-        // LÓGICA DEL ROMPECABEZAS (Mezclado inicial)
-        const positions = [
-            '0px 0px', '-100px 0px', '-200px 0px',
-            '0px -100px', '-100px -100px', '-200px -100px',
-            '0px -200px', '-100px -200px', '-200px -200px'
+        const pieces = [
+            '0 0', '-100px 0', '-200px 0',
+            '0 -100px', '-100px -100px', '-200px -100px',
+            '0 -200px', '-100px -200px', '-200px -200px'
         ];
-        let currentOrder = [...positions].sort(() => Math.random() - 0.5);
+        let current = [...pieces].sort(() => Math.random() - 0.5);
 
         function initPuzzle() {
             const board = document.getElementById('puzzle-board');
             board.innerHTML = '';
-            currentOrder.forEach((pos, index) => {
-                const piece = document.createElement('div');
-                piece.className = 'puzzle-piece';
-                piece.style.backgroundPosition = pos;
-                piece.onclick = () => swapPiece(index);
-                board.appendChild(piece);
+            current.forEach((pos, i) => {
+                const div = document.createElement('div');
+                div.className = 'puzzle-piece';
+                div.style.backgroundPosition = pos;
+                div.onclick = () => {
+                    [current[i], current[(i+1)%9]] = [current[(i+1)%9], current[i]];
+                    initPuzzle();
+                    if(JSON.stringify(current) === JSON.stringify(pieces)) {
+                        document.getElementById('status').innerText = "¡Perfectas juntas! ❤️";
+                        confetti({ particleCount: 200, spread: 80, colors: ['#ff85a1', '#ffffff'] });
+                    }
+                };
+                board.appendChild(div);
             });
-        }
-
-        function swapPiece(index) {
-            // Lógica simple de rotación para "armar"
-            let first = currentOrder[index];
-            currentOrder[index] = currentOrder[(index + 1) % 9];
-            currentOrder[(index + 1) % 9] = first;
-            initPuzzle();
-            checkWin();
-        }
-
-        function checkWin() {
-            if (JSON.stringify(currentOrder) === JSON.stringify(positions)) {
-                document.getElementById('puzzle-status').innerText = "¡Completado! ❤️";
-                document.getElementById('puzzle-board').style.borderColor = "#fbc2eb";
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            }
         }
     </script>
 </body>
